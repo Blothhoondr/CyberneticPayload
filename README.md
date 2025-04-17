@@ -7,10 +7,13 @@
 - `ports=$(cat ports | awk -F " " '{print $4}' | awk -F "/" '{print $1}' | sort -n | tr '\n' ',' | sed 's/,$//')`
 - `nmap -Pn -sVC -vv -p$ports $IP`
 ### Web Directory Fuzzing
-- `ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400`
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400`
+### VHost Fuzzing
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u https://test.url -H "Host: FUZZ.test.url"`
 ### Things to do on the Target Machine Once you Have a Foothold
 - List listening ports on the machine `ss -ltn`
 - List all files and folders including hidden ones in a directory `ls al`
+- See if there is anything the current user can run as sudo `sudo -l`
 
 ## Encryption/Decryption
 ### PGP
@@ -18,10 +21,14 @@
 - Use aforemntioned key to decrypt a file `gpg x.pdf.gpg`
 ### SSH
 - Generate SSH keys for a user `ssh-keygen -f username`
+### Hash Cracking
+- Crack a MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
 
 ## Login Brute Forcing
 ### FTP
 - Use lists created by RoomPrepper (The createLists.sh script takes the users and passwords from the notes.md file and creates these lists) `hydra -L user.lst -P password.lst ftp://x.x.x.x`
+### SSH
+- Use lists created by RoomPrepper (The createLists.sh script takes the users and passwords from the notes.md file and creates these lists) `hydra -L user.lst -P password.lst ssh://x.x.x.x -t 4 -vV`
 ### Web
 - Using hydra with a captured request using the format `hydra -l <username> -P <password_wordlist> <machine_ip> <request_type> '<login_page>:<request_body>:<invalid_notification>'`\
 so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.174.201 http-post-form "/Account/login.aspx?ReturnURL=/admin:__VIEWSTATE=c7UvYlF%2FOoYdanjSx3HqFGCZ9ktcaqHpKyHHiKbVfNezx4JX%2BkvSkLj9IH9GbWF4z41mnESai4vX%2FkWm576GotEhS3W66Cvoz9as16iMPgK0d6yqjJHRpODyonGR2%2Fp3%2FIM8LcN%2Fr5X7zNiaYMnBzEAjp8eFYgBqjCVyUgoP2v7tqlHu&__EVENTVALIDATION=PknlTsjoXO2tIIQR4GG4BnQkewRFwQjxfpAKT06eOvI%2FL%2F07msVZ7JUQ4nBX7RAnbfZRdZ2%2B4gUl2BdBAuoEtbsQww69pvT2jUbpA%2F00YfgzuX8de4fjki4HfD4SDig3jJjMjZoQBLYOdW2Y%2B8W%2FTf17Bdd0hRBOzS%2BpvBmRWe0UIBx7&ctl00%24MainContent%24LoginUser%24UserName=^USER^&ctl00%24MainContent%24LoginUser%24Password=^PASS^&ctl00%24MainContent%24LoginUser%24LoginButton=Log+in:Login failed" -vv`
