@@ -22,7 +22,7 @@
 ### SSH
 - Generate SSH keys for a user `ssh-keygen -f username`
 ### Hash Cracking
-- Crack a MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
+- Crack an MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
 
 ## Login Brute Forcing
 ### FTP
