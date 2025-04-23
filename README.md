@@ -1,4 +1,4 @@
-# Common Commands I Use Frequently (In no particular order)
+# Common Commands/Techniques I Use Frequently (In no particular order)
 
 ## Enumeration
 ### Port Scanning
