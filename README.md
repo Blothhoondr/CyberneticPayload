@@ -62,7 +62,9 @@ so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rock
 
 ## Web App Testing
 ### XSS
-The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like ending the tag that it ends up in for example)
+The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like ending the tag that it ends up in for example).
+Things to consider:
+- When dealing with an API, check the content type in the response headers. If its text/html as oppesed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser and then do the usual to see if the html can be altered etc.
 #### Payloads
 - `"><u>ghostbugg`
 - `<script>alert(1337)</script>`
