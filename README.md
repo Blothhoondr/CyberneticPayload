@@ -74,6 +74,7 @@ The first thing to do is to look for parameters or input fields on the page, put
 Things to consider:
 - When dealing with an API, check the content type in the response headers. If its text/html as opposed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser (Visit https://myapi.com/check.php?username=ghostbugg) and then do the usual to see if the html can be altered (Try https://myapi.com/check.php?username=<u>ghostbugg for example) etc.
 - If your input ends up in a variable of a script or a span tag you can right click on it in the browser dev tools to edit it as HTML to see how the input is interpreted.
+- If attacking a markdown box, try and insert a hyperlink payload (https://github.com/cujanovic/Markdown-XSS-Payloads/tree/master)
 #### Common Example Payloads
 - `"><u>ghostbugg` Initial test to see if we can add HTML to the page
 - `;//` Javascript comment to stop any code after our payload being executed (Use only when required)
