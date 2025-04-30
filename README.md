@@ -79,8 +79,15 @@ Things to consider:
 - For blind xss use https://xsshunter.trufflesecurity.com/app/#/ or your own instance (https://github.com/trufflesecurity/xsshunter). Also, think about the system you are testing and what type of information may be stored at the backend, eg. customer's user agent when placing an order, then use this to your advantage (eg. Intercept the order request and insert an XSS payload in the user agent header etc.)
 #### Bypass types
 - Special character or event handler smuggling
-- Case sensitivity
-#### Common Example Payloads
+- Tag case sensitivity
+- Multiple tag occurrences
+- Using tags to split tags eg. `<scr<script>ipt>alert(1337)</sc</script>ript>`
+- Open tags eg. `img src=x onerror=alert(1337);//`
+- Try less common ways to execute javascript if all script tags and event handlers are being filtered eg. iframe, a href, object
+- JSONP bypass: Use JSONP callback functions to bypass CSP restrictions if possible (Look at script domains in the CSP and search for whether any callback functionality has been discovered that could be exploited. Some examples are Youtube embedding, Google recaptcha mechanism eg. `<script/src=https://youtube.com/oembed?url=https://www.youtube.com/watch?v=vA5tgwEHPDs&callback=alert(1337)></script>`
+  Failing that, look at the target site itself and see if they have any exploitable JSONP functions eg. oauth etc.
+- File upload bypass: Look for ways to upload a file to an allowed script domain in the CSP and be able to run it from there. For example: upload a profile picture, capture the request and add a .js extension and see if that's allowed, assuming it is then resend the request but delete the image data from the request payload and replace it with what you want the script contents to be. Then simply run the script from somewhere else using `<script/src=https://url_to_uploaded_script_file.js></script>`
+#### Common Example Payloads in addition to any listed above
 - `"><u>ghostbugg` Initial test to see if we can add HTML to the page
 - `;//` Javascript comment to stop any code after our payload being executed (Use only when required)
 - `</textarea></script>"/><script>alert(1337)</script>` Reasonable first assumption payload if doing blind XSS
