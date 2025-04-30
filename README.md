@@ -72,12 +72,18 @@ Web App Testing
 ### XSS
 The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like closing the tag/variable that it ends up in and/or commenting out any code after the payload, bypassing filtering/escaping/CSP for example). 
 Things to consider:
-- When dealing with an API, check the content type in the response headers. If its text/html as opposed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser (Visit https://myapi.com/check.php?username=ghostbugg) and then do the usual to see if the html can be altered (Try https://myapi.com/check.php?username=<u>ghostbugg for example) etc.
+- Try different types of payloads to overcome filtering etc. For example the word javascript may be disallowed but you may be able to use an img tag.
+- When dealing with an API, check the content type in the response headers. If its text/html as opposed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser `(Visit https://myapi.com/check.php?username=ghostbugg)` and then do the usual to see if the html can be altered `(Try https://myapi.com/check.php?username=<u>ghostbugg for example)` etc.
 - If your input ends up in a variable of a script or a span tag you can right click on it in the browser dev tools to edit it as HTML to see how the input is interpreted.
-- If attacking a markdown box, try and insert a hyperlink payload (https://github.com/cujanovic/Markdown-XSS-Payloads/tree/master)
+- If attacking a markdown box, try and insert a hyperlink payload, eg. `[a](JaVaScRiPt:alert(1))` (https://github.com/cujanovic/Markdown-XSS-Payloads/tree/master) that will work with the implementation of markdown you are testing. If that doesn't work, try and implement an image payload, eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);//)`
+- For blind xss use https://xsshunter.trufflesecurity.com/app/#/ or your own instance (https://github.com/trufflesecurity/xsshunter). ALso, think about the system you are testing and what type of information may be stored at the backend, eg. customer's user agent when placing an order, then use this to your advantage (eg. Intercept the order request and insert an XSS payload in the user agent header etc.)
+#### Bypass types
+- Special character or event handler smuggling
+- Case sensitivity
 #### Common Example Payloads
 - `"><u>ghostbugg` Initial test to see if we can add HTML to the page
 - `;//` Javascript comment to stop any code after our payload being executed (Use only when required)
+- `</textarea></script>"/><script>alert(1337)</script>` Reasonable first assumption payload if doing blind XSS
 - `<script>alert(1337)</script>`
 - `ghostbugg';alert(1337);//` Payload for scenario described above where our input ended up in a variable (Declared with apostrophes around it) within a script tag
 - `<img src=xxxx onerror=alert(1337)>`
