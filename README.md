@@ -74,21 +74,21 @@ The first thing to do is to look for parameters or input fields on the page, put
 Things to consider:
 - Try different types of payloads to overcome filtering etc. For example the word javascript may be disallowed but you may be able to use an img tag.
 - When dealing with an API, check the content type in the response headers. If its text/html as opposed to text/javascript etc. it could be susceptible to XSS. Send the request in a browser `(Visit https://myapi.com/check.php?username=ghostbugg)` and then do the usual to see if the html can be altered `(Try https://myapi.com/check.php?username=<u>ghostbugg for example)` etc.
-- If your input ends up in a variable of a script or a span tag you can right click on it in the browser dev tools to edit it as HTML to see how the input is interpreted.
+- If your input ends up in a variable of a script or a span tag you can right click on the script tag in the browser dev tools to edit it as HTML to see how the input is interpreted.
 - If attacking a markdown box, try and insert a hyperlink payload, eg. `[a](JaVaScRiPt:alert(1))` (https://github.com/cujanovic/Markdown-XSS-Payloads/tree/master) that will work with the implementation of markdown you are testing. If that doesn't work, try and implement an image payload, eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);//)`
-- For blind xss use https://xsshunter.trufflesecurity.com/app/#/ or your own instance (https://github.com/trufflesecurity/xsshunter). Also, think about the system you are testing and what type of information may be stored at the backend, eg. customer's user agent when placing an order, then use this to your advantage (eg. Intercept the order request and insert an XSS payload in the user agent header etc.)
+- For blind xss use https://xsshunter.trufflesecurity.com/app/#/ or your own instance (https://github.com/trufflesecurity/xsshunter). Also, in addition to the usual obvious places, think about the system you are testing and what type of information may be stored at the backend, eg. customer's user agent when placing an order, then use this to your advantage (eg. Intercept the order request and insert an XSS payload in the user agent header etc.)
 #### Bypass types
 - Special character or event handler smuggling
 - Tag case sensitivity
 - Multiple tag occurrences
 - Using tags to split tags eg. `<scr<script>ipt>alert(1337)</sc</script>ript>`
-- Open tags eg. `img src=x onerror=alert(1337);//`
+- Open tags eg. `<img src=x onerror=alert(1337);//`
 - Try less common ways to execute javascript if all script tags and event handlers are being filtered eg. iframe, a href, object
 - JSONP bypass: Use JSONP callback functions to bypass CSP restrictions if possible (Look at script domains in the CSP and search for whether any callback functionality has been discovered that could be exploited. Some examples are Youtube embedding, Google recaptcha mechanism eg. `<script/src=https://youtube.com/oembed?url=https://www.youtube.com/watch?v=vA5tgwEHPDs&callback=alert(1337)></script>`
   Failing that, look at the target site itself and see if they have any exploitable JSONP functions eg. oauth etc.
 - File upload bypass: Look for ways to upload a file to an allowed script domain in the CSP and be able to run it from there. For example: upload a profile picture, capture the request and add a .js extension and see if that's allowed, assuming it is then resend the request but delete the image data from the request payload and replace it with what you want the script contents to be. Then simply run the script from somewhere else using `<script/src=https://url_to_uploaded_script_file.js></script>`
 #### Common Example Payloads in addition to any listed above
-- `"><u>ghostbugg` Initial test to see if we can add HTML to the page
+- `"/><u>ghostbugg` or just `"><u>ghostbugg` Initial test to see if we can add HTML to the page
 - `;//` Javascript comment to stop any code after our payload being executed (Use only when required)
 - `</textarea></script>"/><script>alert(1337)</script>` Reasonable first assumption payload if doing blind XSS
 - `<script>alert(1337)</script>`
