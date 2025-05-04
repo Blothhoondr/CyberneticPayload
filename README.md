@@ -23,8 +23,17 @@ Encryption/Decryption
 - Use aforemntioned key to decrypt a file `gpg x.pdf.gpg`
 ### SSH
 - Generate SSH keys for a user `ssh-keygen -f username`
+### Conversion of files to hashes (Once complete you may also have to remove the label at the beginning of each line for hascat to recognise the hash)
+- `ansible2john vaultname.vault > crackthis.hash`
+- `keepass2john vaultname.kdb > crackthis.hash`
 ### Hash Cracking
+- Search the hashcat help file for the type of hash you are trying to crack, in this example KeePass: `hashcat --help | grep -i "KeePass"`
+- Crack an MD5 hash `hashcat -a 0 -m 0 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
 - Crack an MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
+- Crack a KeePass database hash `hashcat -a 0 -m 13400 -o cracked_output.txt --outfile-format 2 CrackThis.hash /usr/share/wordlists/rockyou.txt` or `hashcat -a 0 -m 13400 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
+- Crack a SHA512crypt hash `hashcat -a 0 -m 1800 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
+- Crack an Ansible vault pw hash `hashcat -a 0 -m 16900 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
+- Crack a SHA512 salted hash in the format of hash:salt `hashcat -a 0 -m 1710 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
 
 Login Brute Forcing
 ------
