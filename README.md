@@ -1,5 +1,11 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
+Generic Command
+------
+- `grep -v` Inverse matching with grep
+- `grep -E 'pattern1|pattern2' fileName_or_filePath` grp multiple patterns
+- `sort -o outfile.txt -u infile.txt` Remove duplicates from infile.txt and write the remaining lines to outfile.txt
+
 Enumeration
 ------
 ### Port Scanning
