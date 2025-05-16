@@ -1,10 +1,14 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
-Generic Command
+Generic Commands
 ------
 - `grep -v` Inverse matching with grep
 - `grep -E 'pattern1|pattern2' fileName_or_filePath` grp multiple patterns
 - `sort -o outfile.txt -u infile.txt` Remove duplicates from infile.txt and write the remaining lines to outfile.txt
+### Update Git Repos (recursive)
+- `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} stash`
+- `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} stash drop`
+- `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull`
 
 Enumeration
 ------
