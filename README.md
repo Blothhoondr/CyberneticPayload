@@ -43,7 +43,7 @@ Encryption/Decryption
 - Use aforemntioned key to decrypt a file `gpg x.pdf.gpg`
 ### SSH
 - Generate SSH keys for a user `ssh-keygen -f username`
-### Conversion of files to hashes (Once complete you may also have to remove the label at the beginning of each line for hascat to recognise the hash)
+### Conversion of files to hashes (Once complete you may also have to remove the label at the beginning of each line for hashcat to recognise the hash)
 - `ansible2john vaultname.vault > crackthis.hash`
 - `keepass2john vaultname.kdb > crackthis.hash`
 ### Hash Cracking
@@ -54,6 +54,7 @@ Encryption/Decryption
 - Crack a SHA512crypt hash `hashcat -a 0 -m 1800 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
 - Crack an Ansible vault pw hash `hashcat -a 0 -m 16900 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
 - Crack a SHA512 salted hash in the format of hash:salt `hashcat -a 0 -m 1710 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
+- Crack a JWT secret. Save the JWT to a text file called jwt.txt `hashcat -a 0 -m 16500 -o cracked_output.txt --outfile-format 2 jwt.txt C:\wordlists\jwt-secrets-list.txt`
 
 Login Brute Forcing
 ------
