@@ -1,6 +1,6 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
-Generic Commands
+Misc Commands
 ------
 ### Grep
 - `grep -v` Inverse matching with grep
@@ -12,6 +12,8 @@ Generic Commands
 - `find . -maxdepth 3 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull`
 ### Find Command
 - `find / 2>/dev/null | grep desired_word`
+### Searchsploit
+- Copy the path to an exploit found using searchsploit to the clipboard (e.g. exploit 47010 in this case) `searchsploit -p 47010`
 
 Enumeration
 ------
