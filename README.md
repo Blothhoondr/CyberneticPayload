@@ -6,7 +6,7 @@ Fave Resources
 - https://exploit-notes.hdks.org/
 - https://book.hacktricks.wiki/en/index.html
 
-Misc Commands
+Misc
 ------
 ### Grep
 - `grep -v` Inverse matching with grep
@@ -20,6 +20,9 @@ Misc Commands
 - `find / 2>/dev/null | grep desired_word`
 ### Searchsploit
 - Copy the path to an exploit found using searchsploit to the clipboard (e.g. exploit 47010 in this case) `searchsploit -p 47010`
+### Usually User-writable Folders
+/tmp
+/var/tmp
 
 Enumeration
 ------
@@ -43,6 +46,8 @@ Enumeration
 - List listening ports on the machine `ss -ltn`
 - List all files and folders including hidden ones in a directory `ls al`
 - See if there is anything the current user can run as sudo `sudo -l`
+- Look for SSH keys
+- Check if AppArmor is active. If yes, check for bypasses (Like using a kernel library to load a shell `/lib/x86_64-linux-gnu/ld-linux-x86–64.so.2 /bin/bash`)
 
 Encryption/Decryption
 ------
