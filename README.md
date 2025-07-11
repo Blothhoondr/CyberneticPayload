@@ -9,6 +9,8 @@ Fave Resources
 - https://revshells.com
 - https://github.com/artyuum/simple-php-web-shell
 - https://pentestmonkey.net/category/cheat-sheet
+- https://python2to3.com/
+- https://regex-generator.olafneumann.org/
 
 Misc
 ------
@@ -123,6 +125,8 @@ Steganography
 ------
 ### Using steghide
 - `steghide extract -sf image.jpg`
+### Using stegcracker
+- `stegcracker brooklyn99.jpg /usr/share/wordlists/rockyou.txt`
 
 Privilege Escalation
 ------
