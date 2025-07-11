@@ -63,7 +63,7 @@ Encryption/Decryption
 - `ansible2john vaultname.vault > crackthis.hash`
 - `keepass2john vaultname.kdb > crackthis.hash`
 ### Hash Cracking
-- Search the hashcat help file for the type of hash you are trying to crack, in this example KeePass: `hashcat --help | grep -i "KeePass"`
+- Search the hashcat help file for the type of hash you are trying to crack, in this example KeePass: `hashcat --help | grep -i "KeePass"` or check the hashcat example hashes table at https://hashcat.net/wiki/doku.php?id=example_hashes
 - Crack an MD5 hash `hashcat -a 0 -m 0 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
 - Crack an MD5(APR) hash `hashcat -a 0 -m 1600 ./hash /usr/share/wordlists/rockyou.txt`
 - Crack a KeePass database hash `hashcat -a 0 -m 13400 -o cracked_output.txt --outfile-format 2 CrackThis.hash /usr/share/wordlists/rockyou.txt` or `hashcat -a 0 -m 13400 -o cracked_output.txt --outfile-format 2 CrackThis.hash C:\wordlists\SecLists-2025.2\Passwords\Leaked-Databases\rockyou.txt`
