@@ -6,6 +6,9 @@ Fave Resources
 - https://exploit-notes.hdks.org/
 - https://book.hacktricks.wiki/en/index.html
 - https://portswigger.net/web-security/sql-injection/cheat-sheet
+- https://revshells.com
+- https://github.com/artyuum/simple-php-web-shell
+- https://pentestmonkey.net/category/cheat-sheet
 
 Misc
 ------
