@@ -11,6 +11,7 @@ Fave Resources
 - https://pentestmonkey.net/category/cheat-sheet
 - https://python2to3.com/
 - https://regex-generator.olafneumann.org/
+- https://www.cachesleuth.com/multidecoder/
 
 Misc
 ------
