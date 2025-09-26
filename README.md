@@ -42,7 +42,7 @@ Enumeration
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400 -fs 0`
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0`
 ### Web File Fuzzing
-- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0`
+- `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0 -e html,php,txt,bak,old`
 ### Web Parameter Fuzzing for Host Command Injection
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-words.txt -u http://xxxxxx.xxx/assets/index.php?FUZZ=id -fc 404,400 -fs 0`
 ### VHost Fuzzing
