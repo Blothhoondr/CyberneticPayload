@@ -141,6 +141,8 @@ Privilege Escalation
     chmod 755 /tmp/id`
 - Then add the path the binary resides in to the beginning of the PATH variable `export PATH=/tmp:$PATH`
 - Your script should now be ran whenever the binary of the same name is called
+#### User runnable scripts
+- Any time you encounter a script you can run with elevated permissions, it's worth running it and simply entering /bin/bash into any parameters so that if error handling isn't done well it may result in a privileged shell. 
 
 Web App Testing
 ------
