@@ -193,7 +193,7 @@ eg. `![thisisalttext](https://somedomain.com/someimage.png"onerror=alert(1337);/
 - LFI can be tested by submitting a request similar to `/secret-script.php?file=..//..//..//..//etc//passwd`
 - You can use a tool such as Burp Intruder to automate brute forcing of sensitive files on Linux if necessary. Example top line of the request in Intruder `GET /script.php?page=..//..//..//etc/passwd HTTP/1.1` Modify this to have the payload markers around etc/passwd and add in a suitable wordlist into the payload section (https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/LFI)
 - You can use a base64 encoding method to retrieve the contents of files via LFI `http://xxxxxx.xxx/test.php?view=php://filter/convert.base64-encode/resource=/var/www/html/development_testing/..//..//..//..//etc//passwd`
-- ** Any time you find LFI, you should check for web access log poisoning (Logging of the user agent for example in the web access log which you can access via LFI can then be exploited by putting a payload in the user agent header which inserts it into the web access log, then you access the log file via LFI to execute the payload) **
+- *** Any time you find LFI, you should check for web access log poisoning (Logging of the user agent for example in the web access log which you can access via LFI can then be exploited by putting a payload in the user agent header which inserts it into the web access log, then you access the log file via LFI to execute the payload) ***
 ### SSTI
 - On Twig version 2.14.0 or below with the sandbox mode enabled `{{['id',""]|sort('passthru')}}`
 ### Databases
